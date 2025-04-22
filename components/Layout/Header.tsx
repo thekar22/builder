@@ -33,7 +33,7 @@ export function Header({ headerContent }: any) {
               <Link href="/" passHref>
                 <img
                   className="h-6"
-                  src="https://cdn.builder.io/api/v1/image/assets%2Fa87584e551b6472fa0f0a2eb10f2c0ff%2F692369ff646645349e68a86b43fc7a38"
+                  src="https://cdn.builder.io/api/v1/image/assets%2F6b31df061340475a9873733aa2e6b891%2Fcdd23f0ad7b6449d9d9f92eed32a5f88"
                   alt="Builder.io Logo"
                   loading="lazy"
                 />
@@ -55,7 +55,7 @@ export function Header({ headerContent }: any) {
               </NavigationMenuList>
             </NavigationMenu>
             <div className="flex items-center">
-              <CartSlider variant="black" />
+              {/* <CartSlider variant="black" />  */}
               <AuthSlider variant="black" />
             </div>
           </div>
