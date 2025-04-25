@@ -7,42 +7,80 @@ export interface LocaleDropdownProps {
   className?: string;
 }
 
+// Define the localization options
+const localeOptions = {
+  'en-US': {
+    'en-US': 'English',
+    'fr-FR': 'French',
+    'es-MX': 'Spanish',
+    'fil-PH': 'Filipino'
+  },
+  'fr-FR': {
+    'en-US': 'Anglais',
+    'fr-FR': 'Français',
+    'es-MX': 'Espagnol',
+    'fil-PH': 'Philippine'
+  },
+  'es-MX': {
+    'en-US': 'Inglés',
+    'fr-FR': 'Francés',
+    'es-MX': 'Español',
+    'fil-PH': 'Filipino'
+  },
+  'fil-PH': {
+    'en-US': 'Ingles',
+    'fr-FR': 'Pranses',
+    'es-MX': 'Espanyol',
+    'fil-PH': 'Filipino'
+  }
+} as const;
+
+// Type for valid locale codes
+type LocaleCode = keyof typeof localeOptions;
+
 export function LocaleDropdown({
   className,
 }: LocaleDropdownProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  
   // Define valid options as a Set
-  const validOptionSet = new Set(['en-US', 'fil-PH', 'fr-FR', 'es-MX']);
+  const validOptionSet = new Set(Object.keys(localeOptions));
 
   // Safely get current locale
-  const getCurrentLocale = () => {
+  const getCurrentLocale = (): LocaleCode => {
     const paramLocale = searchParams.get('activeLocale');
-    // Only use the param value if it's in our valid set
-    return validOptionSet.has(paramLocale || '') ? paramLocale : 'en-US';
+    return validOptionSet.has(paramLocale || '') 
+      ? (paramLocale as LocaleCode) 
+      : 'en-US';
+  };
+
+  // Get localized name based on current locale
+  const getLocalizedName = (locale: LocaleCode) => {
+    const currentLocale = getCurrentLocale();
+    return localeOptions[currentLocale][locale];
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLoc = e.target.value;
+    const newLoc = e.target.value as LocaleCode;
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set('activeLocale', newLoc);
-    // Create the new URL with updated query parameters
     const newUrl = `${pathname}?${newSearchParams.toString()}`;
-    // Update the URL with the new query parameter
     router.replace(newUrl);
   };
 
   return (
     <select
       className={className}
-      value={getCurrentLocale() || 'en-US'}
+      value={getCurrentLocale()}
       onChange={handleChange}
     >
-      <option value="en-US">English</option>
-      <option value="fr-FR">French</option>
-      <option value="es-MX">Spanish</option>
-      <option value="fil-PH">Filipino</option>
+      {(Object.keys(localeOptions) as LocaleCode[]).map(locale => (
+        <option key={locale} value={locale}>
+          {getLocalizedName(locale)}
+        </option>
+      ))}
     </select>
   );
 }
