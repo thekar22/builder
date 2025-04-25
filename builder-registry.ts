@@ -11,6 +11,8 @@ import ImageHero from "./components/Hero/ImageHero";
 import SplitHero from "./components/Hero/SplitHero";
 import TextHero from "./components/Hero/TextHero";
 
+import { LocaleDropdown } from './components/LocaleDropdown/LocaleDropdown';
+
 builder.init(process.env.NEXT_PUBLIC_BUILDER_API_KEY!);
 
 Builder.register("editor.settings", {
@@ -374,4 +376,18 @@ Builder.registerComponent(Footer, {
 
 Builder.registerComponent(Header, {
   name: "Header",
+});
+
+Builder.registerComponent(LocaleDropdown, {
+  name: 'LocaleDropdown',
+  description: 'A dropdown to switch page locale',
+  inputs: [
+    {
+      name: 'className',
+      type: 'string',
+      defaultValue: 'p-2 border rounded',
+      friendlyName: 'CSS Classes',
+      description: 'Tailwind or CSS classes for styling',
+    },
+  ],
 });

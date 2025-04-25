@@ -7,13 +7,15 @@ interface PageProps {
   params: {
     page: string[];
   };
+  searchParams: {
+    activeLocale?: string;
+  };
 }
-
-// export const revalidate = 500;
 
 export default async function Page(props: PageProps) {
   const builderModelName = "page";
-  const locale = new Intl.DateTimeFormat().resolvedOptions().locale
+  // Get locale from URL parameter, fallback to Intl object locale if not present
+  const locale = props.searchParams?.activeLocale || new Intl.DateTimeFormat().resolvedOptions().locale;
 
   const content = await builder
     // Get the page content from Builder with the specified options
@@ -21,8 +23,8 @@ export default async function Page(props: PageProps) {
       userAttributes: {
         // Use the page path specified in the URL to fetch the content
         urlPath: "/" + (props?.params?.page?.join("/") || ""),
-        locale: locale
       },
+      locale
     })
     // Convert the result to a promise
     .toPromise();
